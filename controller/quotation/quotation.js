@@ -6,6 +6,13 @@ const Quotation = require("../../model/quotation/quotation");
 exports.postQuotation = async (req, res, next) => {
 	const { fullname, telephone, email, service, description } = req.body;
 
+	let errors = [];
+
+	if (!fullname) errors.push("fullname is required");
+	if (!email) errors.push("email is required");
+	if (!description) errors.push("description is required");
+	if (!service) errors.push("Service ID is required");
+
 	try {
 		console.log("The request is", req.body)
 		
@@ -33,13 +40,14 @@ exports.postQuotation = async (req, res, next) => {
 
 		//sending the email
 		const emailData = {
-			to: "info@afrigorithm.com",
+			to: "info@kenixwastesolutions.co.ke",
 			from: process.env.SENDMAILAPIFROM,
 			subject: `Received quotation from : ${fullname}`,
 			html: emailHTML,
 		};
 
 		const response = await SendEmail(emailData)
+		console.log("The response is", response)
 
 		const quotation = Quotation.create({ fullname, telephone, email, service, description })
 
@@ -47,12 +55,10 @@ exports.postQuotation = async (req, res, next) => {
 			return next(new ErrorResponse("Something went wrong while sending quotation", 400))
 		}
 
-		console.log("The quotation is", quotation)
-
 		res.status(200).json({
 			success: true,
 			data: quotation,
-			message: "Quotation was sendsuccessfully"
+			message: "Quotation was send successfully"
 		})
 
 	} catch (error) {

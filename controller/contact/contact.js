@@ -4,9 +4,9 @@ const ErrorResponse = require("../../utils/errorResponse");
 
 exports.contactMessage = async (req, res, next) => {
 	const { fullname, telephone, email, message } = req.body;
+	console.log("The request is", req.body);
 
 	try {
-		console.log("The response is", req.body)
 		if (!fullname) {
 			return next(new ErrorResponse("Fullname is required", 400));
 		}
@@ -30,13 +30,15 @@ exports.contactMessage = async (req, res, next) => {
 
 		//sending the email
 		const emailData = {
-			to: "info@afrigorithm.com",
+			to: "info@kenixwastesolutions.co.ke",
 			from: process.env.SENDMAILAPIFROM,
 			subject: `Contact Message from : ${fullname}`,
 			html: emailHTML,
 		};
 
 		const response = await SendEmail(emailData)
+
+		console.log("Response from send email", response)
 
 		res.status(200).json({
 			success: true,

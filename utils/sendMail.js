@@ -1,5 +1,7 @@
 const SparkPost = require("sparkpost");
-const client = new SparkPost(process.env.SENDMAILAPIKEY, {origin: 'https://api.eu.sparkpost.com'});
+const client = new SparkPost(process.env.SENDMAILAPIKEY, {
+	origin: "https://api.eu.sparkpost.com",
+});
 
 const SendEmail = async ({ to, from, subject, html }) => {
 	const response = await client.transmissions.send({
@@ -14,4 +16,4 @@ const SendEmail = async ({ to, from, subject, html }) => {
 	return response;
 };
 
-module.exports = SendEmail ;
+module.exports = SendEmail;
